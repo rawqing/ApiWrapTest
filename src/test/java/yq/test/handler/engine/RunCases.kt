@@ -1,11 +1,14 @@
 package yq.test.handler.engine
 
+import org.hamcrest.Matcher
 import yq.test.handler.*
 import yq.test.handler.Utils.getMaxSize
 import yq.test.handler.Utils.log
 import yq.test.handler.Utils.polishing
 import yq.test.handler.beans.Case
 import yq.test.handler.beans.ReqResponseCheck
+import yq.test.handler.mapping.KeyMap.bodyKey
+import yq.test.handler.mapping.KeyMap.statusCodeKey
 
 class RunCases {
 
@@ -54,7 +57,18 @@ class RunCases {
         return singleCaseList
     }
 
+    fun case2reqResponseCheck(singleCase: Case): ReqResponseCheck {
+        var rrc = ReqResponseCheck()
+                .withPath(singleCase.path)
+                .withParams(singleCase.params?.let { it as MutableMap<String, String> })
+                .withStatusCode(singleCase.expect?.let { it[statusCodeKey]?.toString()?.toInt()?:200 }?:200)
+                .withBody(singleCase.expect?.let { it[bodyKey] as MutableMap<String, Matcher<*>>})
+        return rrc
+    }
 
+    fun string2fun(str: String) {
+
+    }
     fun singleCaseRun(req:ReqResponseCheck){
         doPost(req)
     }

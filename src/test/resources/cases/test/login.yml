@@ -1,5 +1,6 @@
 name: 登录
 description: 正常的登录用例
+enabled: true
 path: /record.html
 method: post
 headers:
@@ -21,6 +22,7 @@ expect:
 ---
 name: 投资
 description: 各种边界值等价类的投资case
+enabled: fales
 path: /invest.html
 method: post
 headers:
@@ -30,7 +32,7 @@ given:
 params:
   mod: register
   act: invest
-  full: ${user.name + user.password}
+  full: ${{user.name + user.password}}
   token: $_getToken(user.name,user.password)
   amount: [0,1,1000000]
 expect:

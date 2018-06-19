@@ -3,6 +3,7 @@ package yq.test.handler.beans
 data class Case(
         var name: String? = null,
         var description: String? = null,
+        var enabled: Boolean = false,
         var path: String? = null,
         var method: String? = null,
         var headers: Map<String ,Any>? = null,

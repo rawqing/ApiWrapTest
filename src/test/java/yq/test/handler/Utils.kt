@@ -51,11 +51,32 @@ object Utils{
         return ArrayList()
     }
 
-    fun parserFragment(string: String): String {
-        if (!string.startsWith("$")) return string
-
-
-        return ""
+    /**
+     * 获取一个map映射
+     */
+    fun getMapping(file: File): MutableMap<String, String> {
+        var reader: YamlReader? = null
+        try {
+            reader = YamlReader(FileReader(file))
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
+        val map = HashMap<String,String>()
+        while (true) {
+            var contact: Map<*, *>? = null
+            try {
+                contact = reader!!.read(Map::class.java)
+            } catch (e: YamlException) {
+                e.printStackTrace()
+            }
+            if (contact == null) break
+            map.putAll(contact as Map<out String, String>)
+        }
+        return map
+    }
+    fun getMapping(filePath: String): MutableMap<String, String> {
+        val rootPath = this::class.java.getResource(filePath).path
+        return getMapping(File(rootPath))
     }
 
     /**

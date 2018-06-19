@@ -5,20 +5,40 @@ import bsh.Interpreter
 import yq.test.handler.Parser
 import yq.test.handler.Utils.getCaseFiles
 import yq.test.handler.Utils.getCases
-import yq.test.handler.Utils.readYaml
 import yq.test.handler.beans.Case
 import yq.test.handler.engine.RunCases
+import yq.test.handler.mapping.KeyMap.allPrefix
+import yq.test.handler.mapping.KeyMap.funPrefix
+import yq.test.handler.mapping.KeyMap.objPrefix
+import yq.test.handler.mapping.KeyMap.objSuffix
+import yq.test.handler.mapping.KeyMap.paramPrefix
 
 
+@Suppress("CAST_NEVER_SUCCEEDS")
 class TryTest {
     @Test
     fun ent(){
-        var bsh = Interpreter()
+        val bsh = Interpreter()
         // Evaluate statements and expressions
-        val ms = bsh.eval("new Date()")
-        println(ms::class)
-        bsh.set("th" ,Parser())
-        println (bsh.eval("th._md5(\"123456\")"))
+//        val ms = bsh.eval("new Date()")
+        val ree = bsh.eval("\"hello\" + \"world\"")
+        println(ree)
+        val ps = Parser()
+        val u = ps.unscramble("\${{User()}}")
+        ps.setInstance("user",u)
+        val res = ps.unscramble("\${{user.name + user.password}}")
+        println(res)
+
+//        println(ps.unscramble("\$_md5(\"123456\")"))
+
+
+
+
+//        val user = bsh.eval("new yq.test.handler.beans.User()")
+//        println(user::class.java)
+        // 对象获取可用
+//        println(ps.unscramble("\${{User()}}"))
+
 //        bsh.eval("bar=foo*5; bar=Math.cos(bar);")
 //        bsh.eval("for(i=0; i<10; i++) { print(\"hello\"); }")
 //        // same as above using java syntax and apis only
@@ -48,18 +68,27 @@ class TryTest {
             rc.runCase(ca)
         }
     }
+    @Test
+    fun str2fun(){
+        val user = mapOf("user" to "\${{User()}}")
+        val u =  "{{User()}}"
+        var s = "\$_getToken(user.name,user.password)"
+        s= s.removeRange(0..0)
+        println(s)
+        var start =  s.startsWith(funPrefix)
+        println(start)
+        val rs = u.removeSurrounding(objPrefix, objSuffix)
+        println(rs.slice(0..(rs.indexOf(paramPrefix)-1)))
+
+
+    }
+
 
     @Test
     fun tt(){
-        val texts = arrayOf("芦花丛中一扁舟", "俊杰俄从此地游", "义士若能知此理", "反躬难逃可无忧")
-        val result = texts.map { it.substring(0,1) }.reduce { r, s -> "$r$s"}
-        println(result)
-//        val case = Case(name = "n1")
-//        val list = mutableListOf(case)
-//        list.add(list[0].copy())
-//        list[1].path = "p1"
-//
-//        println(list.toString())
+        val s = "abcd()"
+        val split = s.split(".")
+        println(split)
     }
 
     @Test
