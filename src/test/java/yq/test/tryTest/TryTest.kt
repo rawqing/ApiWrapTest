@@ -5,13 +5,16 @@ import bsh.Interpreter
 import yq.test.handler.Parser
 import yq.test.handler.Utils.getCaseFiles
 import yq.test.handler.Utils.getCases
+import yq.test.handler.Utils.readYaml
 import yq.test.handler.beans.Case
+import yq.test.handler.beans.Feature
 import yq.test.handler.engine.RunCases
 import yq.test.handler.mapping.KeyMap.allPrefix
 import yq.test.handler.mapping.KeyMap.funPrefix
 import yq.test.handler.mapping.KeyMap.objPrefix
 import yq.test.handler.mapping.KeyMap.objSuffix
 import yq.test.handler.mapping.KeyMap.paramPrefix
+import java.io.File
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
@@ -86,9 +89,10 @@ class TryTest {
 
     @Test
     fun tt(){
-        val s = "abcd()"
-        val split = s.split(".")
-        println(split)
+        val rootPath = this::class.java.getResource("/cases/test/login.yml").path
+        println(rootPath)
+        val readYaml = readYaml(File(rootPath), Feature::class.java)
+        println(readYaml)
     }
 
     @Test
