@@ -5,10 +5,10 @@ object KeyMap {
     const val bodyKey = "body"
 
 
-    const val objPrefix = "{{"
-    const val objSuffix = "}}"
+    const val prefix = "\${"
+    const val suffix = "}"
     const val funPrefix = "_"
-    const val allPrefix = "$"
+    const val bshObj = "$"
     const val paramPrefix = "("
     const val paramSuffix = ")"
     const val fragmentPrefix = "{"

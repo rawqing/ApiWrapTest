@@ -1,9 +1,28 @@
 name: 登录
-
+datas:
+  登录01:
+    username:
+      - zhangsan
+      - lisi
+    pwd:
+      - 123
+      - 321
+  投资:
+    token:
+      - abc123
+    amount:
+      - 1000
 case:
   -
     name: 登录01
     description: 正常的登录用例
+    data:
+      username:
+        - zhangsan
+        - lisi
+      pwd:
+        - 123
+        - 321
     enabled: true
     path: /record.html
     method: post
@@ -12,16 +31,16 @@ case:
     params:
       mod: register
       act: Login
-      name:
-        - 17600402111
-        - 12200001111
-      password:
-        - $_md5("123456")
+      name: $username
+      password: {{$.md5($pwd)}}
     expect:
       statusCode: 200
       body:
         code: [0,1]
         message: ["操作成功","失败"]
+    push:
+      def:
+        - msg: {{$body.message}}
 
   -
     name: 投资
@@ -37,7 +56,7 @@ case:
       mod: register
       act: invest
       full: ${{user.name + user.password}}
-      token: $_getToken(user.name,user.password)
+      token: $_getToken(user.name,"12300")
       amount: [0,1,1000000]
     expect:
       statusCode: 200

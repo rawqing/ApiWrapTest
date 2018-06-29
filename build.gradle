@@ -18,7 +18,9 @@ apply plugin: 'kotlin'
 sourceCompatibility = 1.8
 
 repositories {
+    jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -30,6 +32,7 @@ dependencies {
     testCompile 'log4j:log4j:1.2.17'
     testCompile 'io.rest-assured:rest-assured:3.0.7'
     testCompile 'com.esotericsoftware.yamlbeans:yamlbeans:1.12'
+    testCompile "yq.test:common:1.0.1"
 
 
     testCompile group: 'junit', name: 'junit', version: '4.12'

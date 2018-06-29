@@ -8,13 +8,16 @@ import yq.test.handler.Utils.getCases
 import yq.test.handler.Utils.readYaml
 import yq.test.handler.beans.Case
 import yq.test.handler.beans.Feature
+import yq.test.handler.beans.User
 import yq.test.handler.engine.RunCases
-import yq.test.handler.mapping.KeyMap.allPrefix
+import yq.test.handler.hasShell
+import yq.test.handler.hooks.HookFun
 import yq.test.handler.mapping.KeyMap.funPrefix
-import yq.test.handler.mapping.KeyMap.objPrefix
-import yq.test.handler.mapping.KeyMap.objSuffix
+import yq.test.handler.mapping.KeyMap.prefix
+import yq.test.handler.mapping.KeyMap.suffix
 import yq.test.handler.mapping.KeyMap.paramPrefix
 import java.io.File
+import java.util.*
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
@@ -76,20 +79,43 @@ class TryTest {
         val user = mapOf("user" to "\${{User()}}")
         val u =  "{{User()}}"
         var s = "\$_getToken(user.name,user.password)"
+        var s1 = "{{_getToken(user.name,\"12300\"),_md5(\"99999\")}}"
+        var s2 = "{{_md5(_getToken(user.name,\"12300\"))}}"
         s= s.removeRange(0..0)
         println(s)
         var start =  s.startsWith(funPrefix)
         println(start)
-        val rs = u.removeSurrounding(objPrefix, objSuffix)
+        val rs = u.removeSurrounding(prefix, suffix)
         println(rs.slice(0..(rs.indexOf(paramPrefix)-1)))
 
 
     }
 
+    @Test
+    fun pTest(){
+//        val sh = Interpreter()
+        val ps = Parser()
+       /* var s1 = "{{$.getToken(user.name,\"12300\",$.md5(\"99999\"));}}"
+        var s2 = "{{$.md5($.getToken(user.name,\"12300\"));}}"
+        ps.setInstance("user", User(name = "zhangsan"))
+        println(ps.sentenceRes(s1))*/
+
+        val map = mapOf("msg" to "123", "code" to 200)
+        ps.setInstance("map", map)
+        val s3 = "{{map.get(\"msg\")}}"
+        println(ps.sentenceRes(s3))
+    }
+
+    fun unshell(str: String): String {
+        if (str.startsWith(prefix) && str.endsWith(suffix)) {
+            return str.removeSurrounding(prefix, suffix)
+        }
+        return str
+    }
 
     @Test
     fun tt(){
-        val rootPath = this::class.java.getResource("/cases/test/login.yml").path
+        val rootPath = this::class.java.getResource("/tests/cases/login03.yml").path
         println(rootPath)
         val readYaml = readYaml(File(rootPath), Feature::class.java)
         println(readYaml)
@@ -97,12 +123,19 @@ class TryTest {
 
     @Test
     fun caset(){
-        val rc = RunCases()
-        val m = mutableMapOf<String,Any>("p1" to "v1"
-                ,"p2" to listOf("1" ,"2")
-                ,"p3" to listOf("a")
+        val str = "\${\$.md5(\$pwdQ1 + \$aA_1 +\$aA_1)}"
+//        val reg = "\\\$[a-z]([a-z]|[A-Z]|[0-9]|_)+".toRegex()
+//        println(reg.containsMatchIn(str))
+//        val replace = str.replace(reg, "123")
+//        println(replace)
+        val ps = Parser()
+        val injectVar = ps.injectVar(str)
+        println(injectVar)
+    }
 
-        )
-        rc.runCase(Case(params = m))
+    @Test
+    fun runTime(){
+        val s = "123"
+        println(s.hasShell("{","}"))
     }
 }

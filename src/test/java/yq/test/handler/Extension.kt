@@ -49,3 +49,10 @@ fun Response.setContentType(contentType: ContentType): Response {
 fun RequestSpecification.post2json(path: String): Response {
     return this.post(path).setContentType(ContentType.JSON)
 }
+
+
+
+/*********************  String  ***********************/
+fun String.hasShell(prefix: String ,suffix: String): Boolean{
+    return this.startsWith(prefix) && this.endsWith(suffix)
+}

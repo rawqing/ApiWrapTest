@@ -1,0 +1,26 @@
+name: 登录
+
+case:
+  -
+    name: 登录01
+    description: 正常的登录用例111111
+    data: `/data/user.yml`
+    enabled: true
+    path: /record.html
+    method: post
+    headers:
+      Context: xxx
+    params:
+      mod: register
+      act: Login
+      name: $username
+      password: ${$.md5($pwd)}
+    expect:
+      statusCode: 200
+      body:
+        code: [0,1]
+        message: ["操作成功","失败"]
+    push:
+      def:
+        - msg: ${$body.message}
+

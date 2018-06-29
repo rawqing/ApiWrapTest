@@ -1,5 +1,7 @@
 package yq.test.handler.engine
 
+import io.restassured.RestAssured
+import io.restassured.http.Method
 import org.hamcrest.Matcher
 import yq.test.handler.*
 import yq.test.handler.Utils.getMaxSize
@@ -88,5 +90,9 @@ class RunCases {
                         this.body(it.key ,it.value)
                     }
                 }
+    }
+
+    private fun doPost(){
+
     }
 }
