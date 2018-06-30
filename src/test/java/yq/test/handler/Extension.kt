@@ -56,3 +56,18 @@ fun RequestSpecification.post2json(path: String): Response {
 fun String.hasShell(prefix: String ,suffix: String): Boolean{
     return this.startsWith(prefix) && this.endsWith(suffix)
 }
+
+/**
+ * 使用正则替换所有匹配的字符串
+ * 替换规则为 给定的函数
+ */
+fun String.replaceAll(regex: Regex, reStr: (matchedString: String) -> String): String {
+    val matches = regex.containsMatchIn(this)
+    if (matches) {
+        return  regex.replace(this){
+            val v = it.groupValues[0]
+            reStr(v)
+        }
+    }
+    return this
+}

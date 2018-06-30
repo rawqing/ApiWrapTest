@@ -7,11 +7,7 @@ object KeyMap {
 
     const val prefix = "\${"
     const val suffix = "}"
-    const val funPrefix = "_"
+//    const val funPrefix = "_"
     const val bshObj = "$"
-    const val paramPrefix = "("
-    const val paramSuffix = ")"
-    const val fragmentPrefix = "{"
-    const val fragmentSuffix = "}"
-
+    const val template_ = "`"
 }

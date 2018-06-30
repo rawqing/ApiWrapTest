@@ -1,13 +1,14 @@
 package yq.test.handler
 
 import bsh.Interpreter
+import yq.test.handler.constant.sentenceRegex
+import yq.test.handler.constant.varRegex
 import yq.test.handler.hooks.HookFun
 import yq.test.handler.mapping.KeyMap
 import yq.test.handler.mapping.KeyMap.bshObj
-import yq.test.handler.mapping.KeyMap.fragmentPrefix
-import yq.test.handler.mapping.KeyMap.fragmentSuffix
 import yq.test.handler.mapping.KeyMap.prefix
 import yq.test.handler.mapping.KeyMap.suffix
+import yq.test.handler.mapping.KeyMap.template_
 
 @Suppress("UNUSED_EXPRESSION")
 class Parser {
@@ -16,9 +17,10 @@ class Parser {
     private val sh = Interpreter()
     private val map: Map<String, String> by lazy { Utils.getMapping("/mapping.yml") }
     private val infuse: Map<String, String> = HashMap()
+    private var testI = 0;
 
 
-    fun unscramble(str: String):Any{
+/*    fun unscramble(str: String):Any{
         if (!str.startsWith(KeyMap.bshObj))    return str
         var s = str.removeRange(0..0)
         if (s.startsWith(KeyMap.prefix) && s.endsWith(KeyMap.suffix)) {
@@ -50,16 +52,16 @@ class Parser {
 
         }
         return str
-    }
+    }*/
 
     /**
      * 为语句注入定义的钩子变量 $abc $a001 等
+     * 仅限于语句中的变量注入
      */
-    fun injectVar(str: String): String{
-        val reg = Regex(pattern = "\\\$[a-z]([a-z]|[A-Z]|[0-9]|_)+")
-        val matches = reg.containsMatchIn(str)
+    private fun injectVar(str: String): String{
+        val matches = varRegex.containsMatchIn(str)
         if (matches) {
-            reg.findAll(str)
+            varRegex.findAll(str)
                     .map { it.value }
                     .distinct() // 去重
                     .forEach {
@@ -70,9 +72,13 @@ class Parser {
         return str
     }
 
+    /**
+     * 拉取一个变量的值 , 根据变量名称
+     * 根据当前的变量的作用域
+     */
     private fun pullVar(str: String): Any {
 
-        return str.slice(0..str.length-2)
+        return str.slice(1..str.length-2)
     }
 
     /**
@@ -81,12 +87,38 @@ class Parser {
     fun sentenceRes(str: String): Any? {
         if (!str.hasShell(prefix, suffix))
             return str
-        val sub = str.removeSurrounding(prefix, suffix)
+        var sub = str.removeSurrounding(prefix, suffix)
+        // 为语句注入变量 , 如果包含变量的话
+        sub = injectVar(sub)
         if (sub.contains(bshObj))
             sh.set(bshObj ,HookFun())
         return sh.eval(sub)
     }
 
+    /**
+     * 字符串模板解释
+     * 可解释的样例:  /test/${$.get($env)}/case/${$.get($filename)}/$user.yml
+     * @param str 非壳后的字符串
+     */
+    fun explainStringTemplate(str: String): String{
+        if (! str.hasShell(template_ ,template_))
+            return str
+        return str.
+                removeSurrounding(template_,template_).
+                let {
+                    // 解释里面的句子
+                    it.replaceAll(sentenceRegex ,{ sentenceRes(it).toString()})
+                }.
+                let {
+                    // 解释里面的变量
+                    it.replaceAll(varRegex ,{ pullVar(it).toString()})
+                }
+    }
+
+    fun testfun(): String {
+        testI += 1
+        return "$testI"
+    }
     /**
      * set 一个变量进去
      */

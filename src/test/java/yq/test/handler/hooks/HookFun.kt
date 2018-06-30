@@ -25,4 +25,8 @@ class HookFun {
     fun getToken(name: String, pwd: String ,md5:String ):String {
         return "$name$pwd$md5"
     }
+
+    fun toUp(string: String): String {
+        return string.toUpperCase()
+    }
 }

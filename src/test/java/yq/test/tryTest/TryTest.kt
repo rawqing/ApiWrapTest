@@ -6,18 +6,12 @@ import yq.test.handler.Parser
 import yq.test.handler.Utils.getCaseFiles
 import yq.test.handler.Utils.getCases
 import yq.test.handler.Utils.readYaml
-import yq.test.handler.beans.Case
 import yq.test.handler.beans.Feature
-import yq.test.handler.beans.User
 import yq.test.handler.engine.RunCases
 import yq.test.handler.hasShell
-import yq.test.handler.hooks.HookFun
-import yq.test.handler.mapping.KeyMap.funPrefix
 import yq.test.handler.mapping.KeyMap.prefix
 import yq.test.handler.mapping.KeyMap.suffix
-import yq.test.handler.mapping.KeyMap.paramPrefix
 import java.io.File
-import java.util.*
 
 
 @Suppress("CAST_NEVER_SUCCEEDS")
@@ -30,10 +24,6 @@ class TryTest {
         val ree = bsh.eval("\"hello\" + \"world\"")
         println(ree)
         val ps = Parser()
-        val u = ps.unscramble("\${{User()}}")
-        ps.setInstance("user",u)
-        val res = ps.unscramble("\${{user.name + user.password}}")
-        println(res)
 
 //        println(ps.unscramble("\$_md5(\"123456\")"))
 
@@ -83,10 +73,7 @@ class TryTest {
         var s2 = "{{_md5(_getToken(user.name,\"12300\"))}}"
         s= s.removeRange(0..0)
         println(s)
-        var start =  s.startsWith(funPrefix)
-        println(start)
         val rs = u.removeSurrounding(prefix, suffix)
-        println(rs.slice(0..(rs.indexOf(paramPrefix)-1)))
 
 
     }
@@ -128,8 +115,9 @@ class TryTest {
 //        println(reg.containsMatchIn(str))
 //        val replace = str.replace(reg, "123")
 //        println(replace)
+        val s = "`/data/\${$.toUp(\$env)}/123/\$path/\${$.toUp(\$env)}/\$user.yml`"
         val ps = Parser()
-        val injectVar = ps.injectVar(str)
+        val injectVar = ps.explainStringTemplate(s)
         println(injectVar)
     }
 
