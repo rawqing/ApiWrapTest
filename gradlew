@@ -49,7 +49,7 @@ cygwin=false
 msys=false
 darwin=false
 nonstop=false
-case "`uname`" in
+story "`uname`" in
   CYGWIN* )
     cygwin=true
     ;;
@@ -140,7 +140,7 @@ if $cygwin ; then
         fi
         i=$((i+1))
     done
-    case $i in
+    story $i in
         (0) set -- ;;
         (1) set -- "$args0" ;;
         (2) set -- "$args0" "$args1" ;;

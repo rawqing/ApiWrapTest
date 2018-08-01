@@ -1,0 +1,37 @@
+name: default
+describe:
+  description: 默认的suite
+listeners:
+  - xxx.xxx.Cccc
+epics:
+  -
+    name: 用户
+    include:
+      - file: cases/user/login.yml
+        exclude:
+          - fds
+      - dir: user/login02
+        exclude:
+          - lll01.yml
+      - cases/user/login02.yml
+
+  -
+    name: tags
+    include:
+      - allIn: true
+        exclude: [login ,reg01.yml]
+    tags: [a,b]
+
+
+  -
+    name: all
+    include:
+      - allIn: true
+  -
+    name: all
+    include:
+      - allIn: true
+        exclude:
+          - user
+
+

@@ -7,10 +7,12 @@ import yq.test.handler.Utils.getCaseFiles
 import yq.test.handler.Utils.getCases
 import yq.test.handler.Utils.readYaml
 import yq.test.handler.beans.Feature
+import yq.test.handler.engine.DubheRunner
 import yq.test.handler.engine.RunCases
 import yq.test.handler.hasShell
 import yq.test.handler.mapping.KeyMap.prefix
 import yq.test.handler.mapping.KeyMap.suffix
+import yq.test.utils.YamlRW
 import java.io.File
 
 
@@ -102,7 +104,7 @@ class TryTest {
 
     @Test
     fun tt(){
-        val rootPath = this::class.java.getResource("/tests/cases/login03.yml").path
+        val rootPath = this::class.java.getResource("/features/cases/login03.yml").path
         println(rootPath)
         val readYaml = readYaml(File(rootPath), Feature::class.java)
         println(readYaml)
@@ -125,5 +127,23 @@ class TryTest {
     fun runTime(){
         val s = "123"
         println(s.hasShell("{","}"))
+    }
+
+    @Test
+    fun yamlTest(){
+
+        val path = this::class.java.getResource("/cases/epic01.yml").path
+        val yf = YamlRW.readYamlFile(path)
+        println(yf)
+
+    }
+    @Test
+    fun runnerTest(){
+        DubheRunner().runner()
+    }
+
+    @Test
+    fun testngTest(){
+
     }
 }

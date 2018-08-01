@@ -1,6 +1,6 @@
 package yq.test.handler.beans
 
-data class Case(
+data class Story(
         var name: String? = null,
         var description: String? = null,
         var data: Any? = null,
@@ -14,5 +14,5 @@ data class Case(
         var push: MutableMap<String ,Any>? = null
 
 ){
-
+    val filter: StoryFilter? = null
 }

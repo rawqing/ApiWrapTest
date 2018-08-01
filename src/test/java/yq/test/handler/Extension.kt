@@ -71,3 +71,12 @@ fun String.replaceAll(regex: Regex, reStr: (matchedString: String) -> String): S
     }
     return this
 }
+/**********************************************Any*******************************/
+
+@Suppress("UNCHECKED_CAST")
+fun <E> Any.toAdd(list: MutableList<E>):MutableList<E>{
+    list.add(this as E)
+    return list
+}
+
+

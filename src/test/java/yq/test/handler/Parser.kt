@@ -4,7 +4,6 @@ import bsh.Interpreter
 import yq.test.handler.constant.sentenceRegex
 import yq.test.handler.constant.varRegex
 import yq.test.handler.hooks.HookFun
-import yq.test.handler.mapping.KeyMap
 import yq.test.handler.mapping.KeyMap.bshObj
 import yq.test.handler.mapping.KeyMap.prefix
 import yq.test.handler.mapping.KeyMap.suffix
@@ -97,7 +96,7 @@ class Parser {
 
     /**
      * 字符串模板解释
-     * 可解释的样例:  /test/${$.get($env)}/case/${$.get($filename)}/$user.yml
+     * 可解释的样例:  /test/${$.get($env)}/story/${$.get($filename)}/$user.yml
      * @param str 非壳后的字符串
      */
     fun explainStringTemplate(str: String): String{

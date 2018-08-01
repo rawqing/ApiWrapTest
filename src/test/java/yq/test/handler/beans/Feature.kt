@@ -1,9 +1,10 @@
 package yq.test.handler.beans
 
-class Feature(
+data class Feature(
         var name: String = "",
         var config: Map<String,Any> = HashMap(),
         var datas: Map<String,Any> = HashMap(),
-        var case: List<Case> = ArrayList()
+        var story: List<Story> = ArrayList()
 ) {
+    val storyFilter: StoryFilter? = null
 }

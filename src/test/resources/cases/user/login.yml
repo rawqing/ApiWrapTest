@@ -1,0 +1,53 @@
+name: 登录
+
+case:
+  -
+    name: 登录01
+    description: 正常的登录用例
+    data:
+      username:
+        - zhangsan
+        - lisi
+      pwd:
+        - 123
+        - 321
+    enabled: true
+    path: /record.html
+    method: post
+    headers:
+      Context: xxx
+    params:
+      mod: register
+      act: Login
+      name: $username
+      password: {{$.md5($pwd)}}
+    expect:
+      statusCode: 200
+      body:
+        code: [0,1]
+        message: ["操作成功","失败"]
+    push:
+      def:
+        - msg: {{$body.message}}
+
+  -
+    name: 投资
+    description: 各种边界值等价类的投资case
+    enabled: fales
+    path: /invest.html
+    method: post
+    headers:
+      Context: xxx
+    given:
+      user: ${{User()}}
+    params:
+      mod: register
+      act: invest
+      full: ${{user.name + user.password}}
+      token: $_getToken(user.name,"12300")
+      amount: [0,1,1000000]
+    expect:
+      statusCode: 200
+      body:
+        code: [1,0]
+        message: "操作成功"

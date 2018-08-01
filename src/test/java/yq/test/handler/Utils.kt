@@ -3,7 +3,7 @@ package yq.test.handler
 import com.esotericsoftware.yamlbeans.YamlException
 import com.esotericsoftware.yamlbeans.YamlReader
 import org.slf4j.LoggerFactory
-import yq.test.handler.beans.Case
+import yq.test.handler.beans.Story
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileReader
@@ -35,8 +35,8 @@ object Utils{
         }
         return cases
     }
-    fun getCases(file: File): List<Case>{
-        return readYaml(file ,Case::class.java)
+    fun getCases(file: File): List<Story>{
+        return readYaml(file ,Story::class.java)
     }
 
     /**
@@ -110,6 +110,16 @@ object Utils{
             }else
                 1
         }.max()?: 1
+    }
+
+    fun getFixedClass(className: String): Class<*>? {
+        try {
+            return Class.forName(className)
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return null
     }
 }
 
